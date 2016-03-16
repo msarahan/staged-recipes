@@ -19,7 +19,7 @@ requirements:
   build:
     - python
     - openssl
-    - perl  5.20.3.1    [win]
+    - perl  5.20.3.1
     - zlib
   run:
     - python
