@@ -1,0 +1,48 @@
+{% set version = "1.60.0" %}
+{% set filename = "boost_%s.tar.bz2" % version.replace(".", "_") %}
+
+package:
+  name: boost
+  version: {{ version }}
+
+source:
+  fn:  {{ filename }}
+  url: http://sourceforge.net/projects/boost/files/boost/{{ version }}/{{ filename }}
+  md5: 65a840e1a0b13a558ff19eeb2c4f0cbe
+
+build:
+  features:
+    - vc9               # [win and py27]
+    - vc10              # [win and py34]
+    - vc14              # [win and py35]
+
+requirements:
+  build:
+    - python
+    - icu               # [unix]
+    - bzip2             # [unix]
+    - zlib
+
+  run:
+    - python
+    - icu               # [unix]
+    - zlib
+
+test:
+  commands:
+    - test -f $PREFIX/lib/libboost_atomic.dylib       # [osx]
+    - test -f $PREFIX/lib/libboost_atomic.so          # [linux]
+    - test -f $PREFIX/lib/libboost_chrono.a           # [unix]
+    - test -f $PREFIX/lib/libboost_chrono.dylib       # [osx]
+    - test -f $PREFIX/lib/libboost_chrono.so          # [linux]
+    - test -f $PREFIX/lib/libboost_container.dylib    # [osx]
+    - test -f $PREFIX/lib/libboost_container.so       # [linux]
+
+about:
+  home: http://www.boost.org/
+  license: Boost-1.0
+  summary: Free peer-reviewed portable C++ source libraries.
+
+extra:
+  recipe-maintainers:
+    - jakirkham
