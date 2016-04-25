@@ -1,15 +1,22 @@
-if "%ARCH%"=="32" (
-   set ARCH=Win32
-   set COPYSUFFIX=
-) else (
-  set ARCH=x64
-  set COPYSUFFIX=64
-)
+rem ROBOCOPY include %LIBRARY_inc% * /E
 
-msbuild source\allinone\allinone.sln /p:Configuration=Release;Platform=%ARCH%
+rem if %ERRORLEVEL% LSS 8 exit 0
+cd source
 
-ROBOCOPY bin%COPYSUFFIX% %LIBRARY_BIN% *.dll /E
-ROBOCOPY lib%COPYSUFFIX% %LIBRARY_LIB% *.lib /E
-ROBOCOPY include %LIBRARY_inc% * /E
+:: MSYS includes a link.exe that is not MSVC's linker.  Hide it.
+MOVE %LIBRARY_PREFIX%\usr\bin\link.exe %LIBRARY_PREFIX%\usr\bin\link.exe.backup
 
-if %ERRORLEVEL% LSS 8 exit 0
+where bash
+
+bash -c "echo $PATH"
+bash -c "echo $(which link.exe)"
+bash runConfigureICU MSYS/MSVC --prefix=%LIBRARY_PREFIX% --enable-static
+if errorlevel 1 exit 1
+make
+if errorlevel 1 exit 1
+make install
+if errorlevel 1 exit 1
+
+:: Restore MSYS' link.exe
+MOVE %LIBRARY_PREFIX%\usr\bin\link.exe.backup %LIBRARY_PREFIX%\usr\bin\link.exe
+exit 0
