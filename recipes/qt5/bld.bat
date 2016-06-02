@@ -3,6 +3,10 @@ set ENABLEDELAYEDEXPANSION
 set QMAKESPEC=win32-msvc%VS_YEAR%
 set SHORT_VERSION=%PKG_VERSION:~0,-2%
 
+rem This file is from conda-forge/obviousci, so we shouldn't include it finally.
+rem There, it gets run before bld.bat is run.
+call %RECIPE_DIR%\obvci_appveyor_python_build_env.cmd
+
 :: NOTE: you must have the DirectX SDK installed for ANGLE to compile:
 ::    https://www.microsoft.com/en-us/download/details.aspx?id=6812
 ::    (572 MB, not availabe through Conda)
