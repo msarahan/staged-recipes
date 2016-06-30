@@ -2,7 +2,7 @@
 {% set short_version = ".".join(version.split(".")[:2]) %}
 
 package:
-  name: qt5
+  name: qt
   version: {{ version }}
 
 source:
@@ -28,14 +28,14 @@ source:
     # https://codereview.qt-project.org/#/c/141019/3//ALL,unified
     # - vs2015_tst_compiler.patch
     # qtbase patches:
-    - 0001-angle-Split-DirectX-headers-and-libraries-out-from-c.patch
+    - 0001-angle-Split-DirectX-headers-and-libraries-out-from-c.patch  # [win]
     # 0002-angle-Add-Scott-Meyer-s-nullptr-emulation.patch
     # 0003-angle-Add-c-begin-end-iterators.patch
-    - 0004-VS2008-Add-typedefs-for-more-int-_t-and-define-_STDI.patch
+    - 0004-VS2008-Add-typedefs-for-more-int-_t-and-define-_STDI.patch  # [win]
     # qt3d patches:
-    - 0001-Don-t-re-typedef-int-_t-if-_STDINT-is-defined.patch
+    - 0001-Don-t-re-typedef-int-_t-if-_STDINT-is-defined.patch  # [win]
     # qtwinextras patches:
-    - 0001-shobjidl-Fix-compile-guard-around-SHARDAPPIDINFOLINK.patch
+    - 0001-shobjidl-Fix-compile-guard-around-SHARDAPPIDINFOLINK.patch  # [win]
 
     # Disable avx2 optimizations in Chromium's libvpx because not all processors support them
     - avx.patch  # [linux]
