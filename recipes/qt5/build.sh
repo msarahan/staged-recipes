@@ -1,5 +1,16 @@
 #!/bin/bash
 
+# Download QtWebkit
+curl "http://linorg.usp.br/Qt/community_releases/5.6/${PKG_VERSION}/qtwebkit-opensource-src-${PKG_VERSION}.tar.xz" > qtwebkit.tar.xz
+unxz qtwebkit.tar.xz
+tar xf qtwebkit.tar
+mv qtwebkit-opensource-src* qtwebkit
+patch -p0 < ${RECIPE_DIR}/0001-qtwebkit-old-ld-compat.patch
+patch -p0 < ${RECIPE_DIR}/0002-qtwebkit-ruby-1.8.patch
+patch -p0 < ${RECIPE_DIR}/0003-qtwebkit-O_CLOEXEC-workaround.patch
+patch -p0 < ${RECIPE_DIR}/0004-qtwebkit-CentOS5-Fix-fucomip-compat-with-gas-2.17.50.patch
+
+rm qtwebkit.tar
 # Compile
 # -------
 chmod +x configure
@@ -26,12 +37,12 @@ if [ `uname` == Linux ]; then
                 -skip location \
                 -skip sensors \
                 -skip serialport \
-                -skip script \
                 -skip serialbus \
                 -skip quickcontrols2 \
                 -skip wayland \
                 -skip canvas3d \
                 -skip 3d \
+                -skip webengine \
                 -system-libjpeg \
                 -system-libpng \
                 -system-zlib \
@@ -40,11 +51,24 @@ if [ `uname` == Linux ]; then
                 -qt-xkbcommon \
                 -xkb-config-root $PREFIX/lib \
                 -dbus \
-                -c++11 \
                 -no-linuxfb \
-                -no-libudev
+                -no-libudev \
+                -D _X_INLINE=inline \
+                -D XK_dead_currency=0xfe6f \
+                -D XK_ISO_Level5_Lock=0xfe13 \
+                -D FC_WEIGHT_EXTRABLACK=215 \
+                -D FC_WEIGHT_ULTRABLACK=FC_WEIGHT_EXTRABLACK \
+                -D GLX_GLXEXT_PROTOTYPES \
 
-    LD_LIBRARY_PATH=$PREFIX/lib make -j $MAKE_JOBS
+# If we must not remove strict_c++ from qtbase/mkspecs/features/qt_common.prf
+# (0007-qtbase-CentOS5-Do-not-use-strict_c++.patch) then we need to add these
+# defines instead:
+# -D __u64="unsigned long long" \
+# -D __s64="__signed__ long long" \
+# -D __le64="unsigned long long" \
+# -D __be64="__signed__ long long"
+
+    LD_LIBRARY_PATH=$PREFIX/lib make -j $MAKE_JOBS || exit 1
     make install
 fi
 
@@ -55,7 +79,7 @@ if [ `uname` == Darwin ]; then
         unset $x
     done
 
-    MACOSX_DEPLOYMENT_TARGET=10.7
+    export MACOSX_DEPLOYMENT_TARGET=10.7
     MAKE_JOBS=$(sysctl -n hw.ncpu)
 
     ./configure -prefix $PREFIX \
@@ -99,7 +123,7 @@ if [ `uname` == Darwin ]; then
                 -no-egl \
                 -no-openssl
 
-    DYLD_FALLBACK_LIBRARY_PATH=$PREFIX/lib make -j $MAKE_JOBS
+    DYLD_FALLBACK_LIBRARY_PATH=$PREFIX/lib make -j $MAKE_JOBS || exit 1
     make install
 fi
 
