@@ -23,8 +23,8 @@ if [ `uname` == Linux ]; then
                 -libdir $PREFIX/lib \
                 -bindir $PREFIX/bin \
                 -headerdir $PREFIX/include/qt \
-                -archdatadir $PREFIX/qt \
-                -datadir $PREFIX/qt \
+                -archdatadir $PREFIX \
+                -datadir $PREFIX \
                 -L $PREFIX/lib \
                 -I $PREFIX/include \
                 -release \
@@ -87,8 +87,8 @@ if [ `uname` == Darwin ]; then
                 -libdir $PREFIX/lib \
                 -bindir $PREFIX/bin \
                 -headerdir $PREFIX/include/qt \
-                -archdatadir $PREFIX/qt \
-                -datadir $PREFIX/qt \
+                -archdatadir $PREFIX \
+                -datadir $PREFIX \
                 -L $PREFIX/lib \
                 -I $PREFIX/include \
                 -release \
