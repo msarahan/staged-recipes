@@ -19,11 +19,13 @@ IF "%DXSDK_DIR%" == "" (
 if "%DIRTY%" == "" (
     :: Shorten our build path as much as possible
     :: cd ..
-    curl -LO "http://download.qt.io/community_releases/%SHORT_VERSION%/%PKG_VERSION%/qtwebkit-opensource-src-%PKG_VERSION%.tar.xz"
-    if errorlevel 1 exit 1
-    7za x -so qtwebkit-opensource-src-%PKG_VERSION%.tar.xz | 7za x -si -aoa -ttar
-    if errorlevel 1 exit 1
-    MOVE qtwebkit-opensource-src-%PKG_VERSION% qtwebkit
+    if %VS_MAJOR% LSS 14 (
+        curl -LO "http://download.qt.io/community_releases/%SHORT_VERSION%/%PKG_VERSION%/qtwebkit-opensource-src-%PKG_VERSION%.tar.xz"
+        if errorlevel 1 exit 1
+        7za x -so qtwebkit-opensource-src-%PKG_VERSION%.tar.xz | 7za x -si -aoa -ttar
+        if errorlevel 1 exit 1
+        MOVE qtwebkit-opensource-src-%PKG_VERSION% qtwebkit
+    )
     mkdir C:\qt5
     :: Copy all files except bld.bat, which needs to stay in place while script runs
     robocopy %SRC_DIR%\ C:\qt5\ *.* /E /move /NFL /NDL /xf bld.bat
