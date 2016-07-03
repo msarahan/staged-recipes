@@ -123,9 +123,6 @@ jom install
 
 conda remove -y -n python27_qt5_build --all
 
-:: remove docs, phrasebooks, translations
-rmdir %PREFIX%\Library\share\qt5 /s /q
-
 %PYTHON% %RECIPE_DIR%\patch_prefix_files.py
 
 :: To rewrite qt.conf contents per conda environment
