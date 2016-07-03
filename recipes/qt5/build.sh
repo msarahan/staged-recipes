@@ -1,11 +1,5 @@
 #!/bin/bash
 
-# Main variables
-# --------------
-BIN=$PREFIX/lib/qt5/bin
-QTCONF=$BIN/qt.conf
-
-
 # Compile
 # -------
 chmod +x configure
@@ -15,10 +9,10 @@ if [ `uname` == Linux ]; then
 
     ./configure -prefix $PREFIX \
                 -libdir $PREFIX/lib \
-                -bindir $PREFIX/lib/qt5/bin \
-                -headerdir $PREFIX/include/qt5 \
-                -archdatadir $PREFIX/lib/qt5 \
-                -datadir $PREFIX/share/qt5 \
+                -bindir $PREFIX/bin \
+                -headerdir $PREFIX/include/qt \
+                -archdatadir $PREFIX/qt \
+                -datadir $PREFIX/qt \
                 -L $PREFIX/lib \
                 -I $PREFIX/include \
                 -release \
@@ -66,10 +60,10 @@ if [ `uname` == Darwin ]; then
 
     ./configure -prefix $PREFIX \
                 -libdir $PREFIX/lib \
-                -bindir $PREFIX/lib/qt5/bin \
-                -headerdir $PREFIX/include/qt5 \
-                -archdatadir $PREFIX/lib/qt5 \
-                -datadir $PREFIX/share/qt5 \
+                -bindir $PREFIX/bin \
+                -headerdir $PREFIX/include/qt \
+                -archdatadir $PREFIX/qt \
+                -datadir $PREFIX/qt \
                 -L $PREFIX/lib \
                 -I $PREFIX/include \
                 -release \
@@ -113,14 +107,8 @@ fi
 # Post build setup
 # ----------------
 
-# Make symlinks of binaries in $BIN to $PREFIX/bin
-for file in $BIN/*
-do
-    ln -sfv ../lib/qt5/bin/$(basename $file) $PREFIX/bin/$(basename $file)-qt5
-done
-
 # Remove static libs
 rm -rf $PREFIX/lib/*.a
 
 # Add qt.conf file to the package to make it fully relocatable
-cp $RECIPE_DIR/qt.conf $BIN/
+cp $RECIPE_DIR/qt.conf $PREFIX/bin/
