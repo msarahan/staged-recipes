@@ -91,7 +91,7 @@ COPY %RECIPE_DIR%\tst_compiler.cpp qtbase\tests\auto\other\compiler\
 
 :: this needs to be CALLed due to an exit statement at the end of configure:
 CALL configure ^
-     -prefix %LIBRARY_PREFIX%\qt ^
+     -prefix %LIBRARY_PREFIX% ^
      -libdir %LIBRARY_LIB% ^
      -bindir %LIBRARY_BIN% ^
      -headerdir %LIBRARY_INC%\qt ^
