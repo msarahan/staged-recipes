@@ -1,5 +1,5 @@
---- /home/ray/qt5-x64-2.7/conda-bld/work/qt-everywhere-opensource-src-5.6.1/qtbase/mkspecs/features/qt_common.prf.orig	2016-07-03 13:38:38.292218828 +0100
-+++ /home/ray/qt5-x64-2.7/conda-bld/work/qt-everywhere-opensource-src-5.6.1/qtbase/mkspecs/features/qt_common.prf	2016-07-03 13:41:57.842224023 +0100
+--- qtbase/mkspecs/features/qt_common.prf.orig	2016-07-03 13:38:38.292218828 +0100
++++ qtbase/mkspecs/features/qt_common.prf	2016-07-03 13:41:57.842224023 +0100
 @@ -12,7 +12,16 @@
  QMAKE_DIR_REPLACE_SANE += DESTDIR
  CONFIG -= debug_and_release_target

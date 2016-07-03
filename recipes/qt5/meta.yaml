@@ -35,6 +35,7 @@ source:
     - 0005-Remove-unused-include-sys-signalfd.h.patch  # [linux]
     - 0006-zlib_dependency-Add-EXTRA_INCLUDEPATH-for-system-zli.patch  # [linux]
     - 0007-qtbase-CentOS5-Do-not-use-strict_c++.patch  # [linux]
+    - 0008-qtbase-Ubuntu-disable_overlay_scrollbars.patch  # [linux]
     # qt3d patches:
     - 0001-Don-t-re-typedef-int-_t-if-_STDINT-is-defined.patch  # [win]
     # qtwinextras patches:
