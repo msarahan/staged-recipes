@@ -3,7 +3,7 @@ import os
 import sys
 
 PREFIX = os.environ['PREFIX']
-LIBQT5 = os.path.join(PREFIX, 'Library', 'lib', 'qt5')
+LIBQT5 = os.path.join(PREFIX, 'Library', 'qt')
 # Qt5 installs .prl files with hard-coded prefixes containing \\\\ path
 # separators, which conda does not know how to replace on install.
 # This script searches for such paths, and replaces the path separators

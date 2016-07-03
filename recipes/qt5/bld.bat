@@ -19,11 +19,13 @@ IF "%DXSDK_DIR%" == "" (
 if "%DIRTY%" == "" (
     :: Shorten our build path as much as possible
     :: cd ..
-    curl -LO "http://download.qt.io/community_releases/%SHORT_VERSION%/%PKG_VERSION%/qtwebkit-opensource-src-%PKG_VERSION%.tar.xz"
-    if errorlevel 1 exit 1
-    7za x -so qtwebkit-opensource-src-%PKG_VERSION%.tar.xz | 7za x -si -aoa -ttar
-    if errorlevel 1 exit 1
-    MOVE qtwebkit-opensource-src-%PKG_VERSION% qtwebkit
+    if %VS_MAJOR% LSS 14 (
+        curl -LO "http://download.qt.io/community_releases/%SHORT_VERSION%/%PKG_VERSION%/qtwebkit-opensource-src-%PKG_VERSION%.tar.xz"
+        if errorlevel 1 exit 1
+        7za x -so qtwebkit-opensource-src-%PKG_VERSION%.tar.xz | 7za x -si -aoa -ttar
+        if errorlevel 1 exit 1
+        MOVE qtwebkit-opensource-src-%PKG_VERSION% qtwebkit
+    )
     mkdir C:\qt5
     :: Copy all files except bld.bat, which needs to stay in place while script runs
     robocopy %SRC_DIR%\ C:\qt5\ *.* /E /move /NFL /NDL /xf bld.bat
@@ -89,15 +91,17 @@ COPY %RECIPE_DIR%\tst_compiler.cpp qtbase\tests\auto\other\compiler\
 
 :: this needs to be CALLed due to an exit statement at the end of configure:
 CALL configure ^
-     -archdatadir %LIBRARY_LIB%\qt5 ^
-     -bindir %LIBRARY_BIN%\qt5 ^
-     -confirm-license ^
-     -datadir %LIBRARY_PREFIX%\share\qt5 ^
-     -fontconfig ^
-     -headerdir %LIBRARY_INC%\qt5 ^
-     -I %LIBRARY_INC% ^
-     -icu ^
+     -prefix %LIBRARY_PREFIX% ^
+     -libdir %LIBRARY_LIB% ^
+     -bindir %LIBRARY_BIN% ^
+     -headerdir %LIBRARY_INC%\qt ^
+     -archdatadir %LIBRARY_PREFIX%\qt ^
+     -datadir %LIBRARY_PREFIX%\qt ^
      -L %LIBRARY_LIB% ^
+     -I %LIBRARY_INC% ^
+     -confirm-license ^
+     -fontconfig ^
+     -icu ^
      -libdir %LIBRARY_LIB%\qt5 ^
      -no-separate-debug-info ^
      -no-warnings-are-errors ^
@@ -108,7 +112,6 @@ CALL configure ^
      -opensource ^
      -openssl ^
      -platform win32-msvc%VS_YEAR% ^
-     -prefix %LIBRARY_PREFIX% ^
      -release ^
      -shared ^
      -system-libjpeg ^
@@ -122,10 +125,10 @@ jom install
 
 conda remove -y -n python27_qt5_build --all
 
-:: remove docs, phrasebooks, translations
-rmdir %PREFIX%\Library\share\qt5 /s /q
-
 %PYTHON% %RECIPE_DIR%\patch_prefix_files.py
+
+:: To rewrite qt.conf contents per conda environment
+copy "%RECIPE_DIR%\write_qtconf.bat" "%PREFIX%\Scripts\.qt-post-link.bat"
 
 cd %SRC_DIR%
 RD /S /Q C:\qt5
