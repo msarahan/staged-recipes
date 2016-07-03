@@ -59,7 +59,18 @@ if [ `uname` == Linux ]; then
                 -D XK_ISO_Level5_Lock=0xfe13 \
                 -D FC_WEIGHT_EXTRABLACK=215 \
                 -D FC_WEIGHT_ULTRABLACK=FC_WEIGHT_EXTRABLACK \
-                -D GLX_GLXEXT_PROTOTYPES \
+                -D GLX_GLXEXT_PROTOTYPES
+
+# Currently broken since CentOS 5.11 only has gtk2 version 2.10.4:
+# -gtkstyle \
+# Digging into git history gives:
+# pushd /f/upstreams/qt-project/qt5/qtbase
+# git blame configure | grep "cflags gtk"
+# ebca7d2ea (J-P Nurmi                  2013-01-29 17:02:54 +0100 5135)         QT_CFLAGS_QGTK2=`$PKG_CONFIG --cflags gtk+-2.0 ">=" 2.18 atk 2>/dev/null`
+# git blame configure ebca7d2ea^ | grep "cflags gtk"
+# 2cce297b5 (J-P Nurmi                  2012-10-08 15:10:44 +0200 4475)         QT_CFLAGS_QGTKSTYLE=`$PKG_CONFIG --cflags gtk+-2.0 ">=" 2.18 atk 2>/dev/null`
+# git blame configure 2cce297b5^ | grep "cflags gtk"
+# 842a0b094 (Morten Johan Sorvig        2012-04-24 14:23:02 +0200 4479)         QT_CFLAGS_QGTKSTYLE=`$PKG_CONFIG --cflags gtk+-2.0 ">=" 2.10 atk 2>/dev/null`
 
 # If we must not remove strict_c++ from qtbase/mkspecs/features/qt_common.prf
 # (0007-qtbase-CentOS5-Do-not-use-strict_c++.patch) then we need to add these
