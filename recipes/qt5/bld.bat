@@ -128,5 +128,8 @@ rmdir %PREFIX%\Library\share\qt5 /s /q
 
 %PYTHON% %RECIPE_DIR%\patch_prefix_files.py
 
+:: To rewrite qt.conf contents per conda environment
+copy "%RECIPE_DIR%\write_qtconf.bat" "%PREFIX%\Scripts\.qt-post-link.bat"
+
 cd %SRC_DIR%
 RD /S /Q C:\qt5
