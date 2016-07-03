@@ -89,15 +89,17 @@ COPY %RECIPE_DIR%\tst_compiler.cpp qtbase\tests\auto\other\compiler\
 
 :: this needs to be CALLed due to an exit statement at the end of configure:
 CALL configure ^
-     -archdatadir %LIBRARY_LIB%\qt5 ^
-     -bindir %LIBRARY_BIN%\qt5 ^
-     -confirm-license ^
-     -datadir %LIBRARY_PREFIX%\share\qt5 ^
-     -fontconfig ^
-     -headerdir %LIBRARY_INC%\qt5 ^
-     -I %LIBRARY_INC% ^
-     -icu ^
+     -prefix %LIBRARY_PREFIX%\qt ^
+     -libdir %LIBRARY_LIB% ^
+     -bindir %LIBRARY_BIN% ^
+     -headerdir %LIBRARY_INC%\qt ^
+     -archdatadir %LIBRARY_PREFIX%\qt ^
+     -datadir %LIBRARY_PREFIX%\qt ^
      -L %LIBRARY_LIB% ^
+     -I %LIBRARY_INC% ^
+     -confirm-license ^
+     -fontconfig ^
+     -icu ^
      -libdir %LIBRARY_LIB%\qt5 ^
      -no-separate-debug-info ^
      -no-warnings-are-errors ^
@@ -108,7 +110,6 @@ CALL configure ^
      -opensource ^
      -openssl ^
      -platform win32-msvc%VS_YEAR% ^
-     -prefix %LIBRARY_PREFIX% ^
      -release ^
      -shared ^
      -system-libjpeg ^
