@@ -7,7 +7,7 @@ chmod +x configure
 if [ `uname` == Linux ]; then
     MAKE_JOBS=$CPU_COUNT
 
-    ./configure -prefix $PREFIX/qt \
+    ./configure -prefix $PREFIX \
                 -libdir $PREFIX/lib \
                 -bindir $PREFIX/bin \
                 -headerdir $PREFIX/include/qt \
@@ -58,7 +58,7 @@ if [ `uname` == Darwin ]; then
     MACOSX_DEPLOYMENT_TARGET=10.7
     MAKE_JOBS=$(sysctl -n hw.ncpu)
 
-    ./configure -prefix $PREFIX/qt \
+    ./configure -prefix $PREFIX \
                 -libdir $PREFIX/lib \
                 -bindir $PREFIX/bin \
                 -headerdir $PREFIX/include/qt \
