@@ -72,6 +72,14 @@ if [ `uname` == Linux ]; then
 # git blame configure 2cce297b5^ | grep "cflags gtk"
 # 842a0b094 (Morten Johan Sorvig        2012-04-24 14:23:02 +0200 4479)         QT_CFLAGS_QGTKSTYLE=`$PKG_CONFIG --cflags gtk+-2.0 ">=" 2.10 atk 2>/dev/null`
 
+# Also broken is OpenGL:
+# QXcbConnection: Failed to initialize XRandr
+# QXcbIntegration: Cannot create platform OpenGL context, neither GLX nor EGL are enabled
+# Probably .. https://bugreports.qt.io/browse/QTBUG-43784
+
+# Finally (at least) 32-bit Webkit problem with Sypder:
+# ImportError: /home/carlos/miniconda/envs/test-spy/lib/python2.7/site-packages/PyQt5/../../../libQt5WebKit.so.5: cannot restore segment prot after reloc: Permission denied
+
 # If we must not remove strict_c++ from qtbase/mkspecs/features/qt_common.prf
 # (0007-qtbase-CentOS5-Do-not-use-strict_c++.patch) then we need to add these
 # defines instead:
