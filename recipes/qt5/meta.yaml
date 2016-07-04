@@ -100,7 +100,7 @@ requirements:
 
 test:
   requires:
-    - gcc
+    - gcc  # [linux]
   files:
     - test
 
@@ -115,3 +115,4 @@ extra:
         - ddale
         - jdreaver
         - msarahan
+        - mingwandroid
