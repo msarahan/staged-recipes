@@ -95,8 +95,8 @@ CALL configure ^
      -libdir %LIBRARY_LIB% ^
      -bindir %LIBRARY_BIN% ^
      -headerdir %LIBRARY_INC%\qt ^
-     -archdatadir %LIBRARY_PREFIX%\qt ^
-     -datadir %LIBRARY_PREFIX%\qt ^
+     -archdatadir %LIBRARY_PREFIX% ^
+     -datadir %LIBRARY_PREFIX% ^
      -L %LIBRARY_LIB% ^
      -I %LIBRARY_INC% ^
      -confirm-license ^
