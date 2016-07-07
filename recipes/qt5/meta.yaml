@@ -29,6 +29,7 @@ source:
     # https://codereview.qt-project.org/#/c/141019/
     # https://codereview.qt-project.org/#/c/141019/3//ALL,unified
     # - vs2015_tst_compiler.patch
+
     # qtbase patches:
     - 0001-angle-Split-DirectX-headers-and-libraries-out-from-c.patch  # [win]
     # 0002-angle-Add-Scott-Meyer-s-nullptr-emulation.patch
@@ -38,6 +39,8 @@ source:
     - 0006-zlib_dependency-Add-EXTRA_INCLUDEPATH-for-system-zli.patch  # [linux]
     - 0007-qtbase-CentOS5-Do-not-use-strict_c++.patch  # [linux]
     - 0008-qtbase-Ubuntu-disable_overlay_scrollbars.patch  # [linux]
+    - 0009-qtbase-Reduce-gtk-2-version-from-2.18-to-2.10.patch
+
     # qt3d patches:
     - 0001-Don-t-re-typedef-int-_t-if-_STDINT-is-defined.patch  # [win]
     # qtwinextras patches:
