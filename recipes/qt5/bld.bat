@@ -106,7 +106,6 @@ CALL configure ^
      -confirm-license ^
      -fontconfig ^
      -icu ^
-     -libdir %LIBRARY_LIB%\qt5 ^
      -no-separate-debug-info ^
      -no-warnings-are-errors ^
      -nomake examples ^
