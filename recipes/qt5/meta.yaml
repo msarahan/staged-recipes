@@ -69,7 +69,8 @@ requirements:
     - fontconfig 2.11.*  # [linux]
     - freetype  2.5*  # [linux]
     - gst-plugins-base  # [linux]
-    - icu 54.*
+    - icu 54.*  # [not win]
+    - icu 57.*  # [win]
     - jom  # [win]
     - jpeg 8*  # [not osx]
     - libpng >=1.6.21,<1.7  # [not osx]
@@ -85,6 +86,7 @@ requirements:
     - zlib 1.2*
     - dbus  # [linux]
     - gcc  # [linux]
+    - msinttypes  # [win and py<34]
 
 
   run:
@@ -92,7 +94,8 @@ requirements:
     - freetype 2.5*  # [linux]
     - gst-plugins-base  # [linux]
     - jpeg 8*  # [not osx]
-    - icu 54.*
+    - icu 54.*  # [not win]
+    - icu 57.*  # [win]
     - libpng >=1.6.21,<1.7  # [not osx]
     - libxcb  # [linux]
     - openssl 1.0*  # [not osx]
