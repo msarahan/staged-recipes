@@ -1,5 +1,5 @@
 @echo on
-set ENABLEDELAYEDEXPANSION
+setlocal EnableDelayedExpansion
 set QMAKESPEC=win32-msvc%VS_YEAR%
 set SHORT_VERSION=%PKG_VERSION:~0,-2%
 
