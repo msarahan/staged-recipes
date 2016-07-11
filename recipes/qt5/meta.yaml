@@ -42,6 +42,8 @@ source:
     # This needs (lots) more work (in 2.10, the gtk color picker doesn't exist, Qt uses it)
     # .. the commits to revert: 842a0b094, 2cce297b5, ebca7d2ea and can configure -gtkstyle
     # - 0009-qtbase-Reduce-gtk-2-version-from-2.18-to-2.10.patch
+    # https://bugreports.qt.io/browse/QTBUG-43784
+    - 0010-qtbase-XCB-Auto-detect-xcb-glx-also-with-xcb-qt.patch
 
     # qt3d patches:
     - 0001-Don-t-re-typedef-int-_t-if-_STDINT-is-defined.patch  # [win]
