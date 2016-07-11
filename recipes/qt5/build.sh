@@ -15,6 +15,8 @@ if [ `uname` == Linux ]; then
     patch -p0 < ${RECIPE_DIR}/0002-qtwebkit-ruby-1.8.patch
     patch -p0 < ${RECIPE_DIR}/0003-qtwebkit-O_CLOEXEC-workaround.patch
     patch -p0 < ${RECIPE_DIR}/0004-qtwebkit-CentOS5-Fix-fucomip-compat-with-gas-2.17.50.patch
+    # From https://bugs.webkit.org/show_bug.cgi?id=70610, http://trac.webkit.org/changeset/172759, https://github.com/WebKit/webkit/commit/4d7f0f
+    patch -p0 < ${RECIPE_DIR}/0005-qtwebkit-fix-TEXTREL-on-x86-changeset_172759.patch
     rm qtwebkit.tar
 
     MAKE_JOBS=$CPU_COUNT
@@ -60,25 +62,8 @@ if [ `uname` == Linux ]; then
                 -D FC_WEIGHT_EXTRABLACK=215 \
                 -D FC_WEIGHT_ULTRABLACK=FC_WEIGHT_EXTRABLACK \
                 -D GLX_GLXEXT_PROTOTYPES
-
-# Currently broken since CentOS 5.11 only has gtk2 version 2.10.4:
-# -gtkstyle \
-# Digging into git history gives:
-# pushd /f/upstreams/qt-project/qt5/qtbase
-# git blame configure | grep "cflags gtk"
-# ebca7d2ea (J-P Nurmi                  2013-01-29 17:02:54 +0100 5135)         QT_CFLAGS_QGTK2=`$PKG_CONFIG --cflags gtk+-2.0 ">=" 2.18 atk 2>/dev/null`
-# git blame configure ebca7d2ea^ | grep "cflags gtk"
-# 2cce297b5 (J-P Nurmi                  2012-10-08 15:10:44 +0200 4475)         QT_CFLAGS_QGTKSTYLE=`$PKG_CONFIG --cflags gtk+-2.0 ">=" 2.18 atk 2>/dev/null`
-# git blame configure 2cce297b5^ | grep "cflags gtk"
-# 842a0b094 (Morten Johan Sorvig        2012-04-24 14:23:02 +0200 4479)         QT_CFLAGS_QGTKSTYLE=`$PKG_CONFIG --cflags gtk+-2.0 ">=" 2.10 atk 2>/dev/null`
-
-# Also broken is OpenGL:
-# QXcbConnection: Failed to initialize XRandr
-# QXcbIntegration: Cannot create platform OpenGL context, neither GLX nor EGL are enabled
-# Probably .. https://bugreports.qt.io/browse/QTBUG-43784
-
-# Finally (at least) 32-bit Webkit problem with Sypder:
-# ImportError: /home/carlos/miniconda/envs/test-spy/lib/python2.7/site-packages/PyQt5/../../../libQt5WebKit.so.5: cannot restore segment prot after reloc: Permission denied
+# To get a much quicker turnaround you can add this: (remember also to add the backslash after GLX_GLXEXT_PROTOTYPES)
+# -skip qtwebsockets -skip qtwebchannel -skip qtwayland -skip qtsvg -skip qtsensors -skip qtcanvas3d -skip qtconnectivity -skip declarative -skip multimedia -skip qttools
 
 # If we must not remove strict_c++ from qtbase/mkspecs/features/qt_common.prf
 # (0007-qtbase-CentOS5-Do-not-use-strict_c++.patch) then we need to add these
