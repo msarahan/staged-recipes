@@ -106,7 +106,6 @@ if [ `uname` == Darwin ]; then
                 -skip location \
                 -skip sensors \
                 -skip serialport \
-                -skip script \
                 -skip serialbus \
                 -skip quickcontrols2 \
                 -skip wayland \
