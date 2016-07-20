@@ -11,12 +11,12 @@ if [ `uname` == Linux ]; then
     unxz qtwebkit.tar.xz
     tar xf qtwebkit.tar
     mv qtwebkit-opensource-src* qtwebkit
-    patch -p0 < ${RECIPE_DIR}/0001-qtwebkit-old-ld-compat.patch
-    patch -p0 < ${RECIPE_DIR}/0002-qtwebkit-ruby-1.8.patch
-    patch -p0 < ${RECIPE_DIR}/0003-qtwebkit-O_CLOEXEC-workaround.patch
-    patch -p0 < ${RECIPE_DIR}/0004-qtwebkit-CentOS5-Fix-fucomip-compat-with-gas-2.17.50.patch
+    patch -p0 < "${RECIPE_DIR}"/0001-qtwebkit-old-ld-compat.patch
+    patch -p0 < "${RECIPE_DIR}"/0002-qtwebkit-ruby-1.8.patch
+    patch -p0 < "${RECIPE_DIR}"/0003-qtwebkit-O_CLOEXEC-workaround.patch
+    patch -p0 < "${RECIPE_DIR}"/0004-qtwebkit-CentOS5-Fix-fucomip-compat-with-gas-2.17.50.patch
     # From https://bugs.webkit.org/show_bug.cgi?id=70610, http://trac.webkit.org/changeset/172759, https://github.com/WebKit/webkit/commit/4d7f0f
-    patch -p0 < ${RECIPE_DIR}/0005-qtwebkit-fix-TEXTREL-on-x86-changeset_172759.patch
+    patch -p0 < "${RECIPE_DIR}"/0005-qtwebkit-fix-TEXTREL-on-x86-changeset_172759.patch
     rm qtwebkit.tar
 
     MAKE_JOBS=$CPU_COUNT
@@ -136,7 +136,7 @@ fi
 # ----------------
 
 # Remove static libs
-rm -rf $PREFIX/lib/*.a
+rm -rf "${PREFIX}"/lib/*.a
 
 # Add qt.conf file to the package to make it fully relocatable
-cp $RECIPE_DIR/qt.conf $PREFIX/bin/
+cp "${RECIPE_DIR}"/qt.conf "${PREFIX}"/bin/
