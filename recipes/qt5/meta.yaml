@@ -54,6 +54,9 @@ source:
     - avx1.patch  # [linux]
     - avx2.patch  # [linux]
 
+    # qtwebengine patches:
+    - 0001-qtwebengine-Darwin-remove-Xcode-and-kernel-min-versions.patch
+
     # Fix errors when compiling WebEngine video components in RedHat/CentOS 6
     # See https://bugreports.qt.io/browse/QTBUG-48298
     - v4l2.patch  # [linux]
