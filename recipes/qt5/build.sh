@@ -134,9 +134,10 @@ fi
 
 # Post build setup
 # ----------------
-
-# Remove static libs
-rm -rf "${PREFIX}"/lib/*.a
+# Remove static libraries that are not part of the Qt SDK.
+pushd "${PREFIX}"/lib > /dev/null
+    find . -name "*.a" -and -not -name "libQt*" -exec rm -f {} \;
+popd > /dev/null
 
 # Add qt.conf file to the package to make it fully relocatable
 cp "${RECIPE_DIR}"/qt.conf "${PREFIX}"/bin/
