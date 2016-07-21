@@ -43,7 +43,7 @@ source:
     # .. the commits to revert: 842a0b094, 2cce297b5, ebca7d2ea and can configure -gtkstyle
     # - 0009-qtbase-Reduce-gtk-2-version-from-2.18-to-2.10.patch
     # https://bugreports.qt.io/browse/QTBUG-43784
-    - 0010-qtbase-XCB-Auto-detect-xcb-glx-also-with-xcb-qt.patch
+    - 0010-qtbase-XCB-Auto-detect-xcb-glx-also-with-xcb-qt.patch  # [linux]
 
     # qt3d patches:
     - 0001-Don-t-re-typedef-int-_t-if-_STDINT-is-defined.patch  # [win]
@@ -55,7 +55,7 @@ source:
     - avx2.patch  # [linux]
 
     # qtwebengine patches:
-    - 0001-qtwebengine-Darwin-remove-Xcode-and-kernel-min-versions.patch
+    - 0001-qtwebengine-Darwin-remove-Xcode-and-kernel-min-versions.patch  # [osx]
 
     # Fix errors when compiling WebEngine video components in RedHat/CentOS 6
     # See https://bugreports.qt.io/browse/QTBUG-48298
