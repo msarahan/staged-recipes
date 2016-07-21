@@ -54,8 +54,11 @@ source:
     - avx1.patch  # [linux]
     - avx2.patch  # [linux]
 
-    # qtwebengine patches:
-    - 0001-qtwebengine-Darwin-remove-Xcode-and-kernel-min-versions.patch  # [osx]
+    # qtwebengine patches - these are to allow building with Clang 3.3 on OS X 10.7 but there
+    # is a bit more work to do on that:
+    # - 0001-qtwebengine-Darwin-remove-Xcode-and-kernel-min-versions.patch  # [osx]
+    # - 0002-qtwebengine-moz-libvpx-apple-clang.patch  # [osx]
+    # - 0003-qtwebengine-builtin_bswap16-for-clang-4_3.patch  # [osx]
 
     # Fix errors when compiling WebEngine video components in RedHat/CentOS 6
     # See https://bugreports.qt.io/browse/QTBUG-48298
