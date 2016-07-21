@@ -1,3 +1,11 @@
+## Notes concerning Linux
+
+- Lots of patches have been applied for CentOS 5.11 support.
+- There are still issues with XRandr on that distro being too old.
+  This isn't so bad since the version is dynamically determined,
+  but it does mean that HiDPI is tempremental on CentOS 5.11 itself.
+- WebEngine isn't possible on CentOS 5.11 due to lack of egl.
+
 ## Notes concerning OS X
 
 - To build Qt5 you need XCode in your system, Command Line Tools is not
@@ -8,20 +16,17 @@
 
 ## Notes concerning Windows:
 
-- It is possible to build Qt5 with MSVC2008, but I have not been successful
-  building ICU with MSVC2008. The readme.html in ICU's sources explain how to
-  build with older MSVC via cygwin, but I have not been successful. Riverbank
-  Computing does not provide PyQt5 installers for python2.7 on windows, due
-  to the lack of MSVC2008 support. It seems unwise to distribute PyQt5 for py27
-  without upstream support.
-
+- WebEngine isn't possible on Windows due to using Visual Studio 2008
+  and also (on later Visual Studios) due to bad DirectX support in VMs.
+  By that I mean VirtualBox specifically where it takes the entire system
+  down.
 - Building from source requires preparing the environment outside conda
   (see http://qt-project.org/doc/qt-5/windows-requirements.html):
 
     * ActivePerl
-    * Ruby
-    * Python (trivial)
-    * DirectX SDK (if omitting `-opengl desktop` config argument)
+    * Ruby (currently you need to download this and install to C:\Ruby23)
+    * Python (2.7 for QtWebEngine) (handled for you in bld.bat)
+    * DirectX SDK
     * Visual C++ 2010:
 
       1. Install Visual Studio 2010
@@ -38,13 +43,17 @@
   http://trac.webkit.org/wiki/BuildingQtOnWindows were especially helpful, and
   include links to build dependencies.
 
+  When I get a chance, I will replace as many of these external dependencies as
+  possible with packages from the msys2 channel.
+
   This recipe assumes the computer on which Qt-5 will be installed has drivers
   supporting opengl. It could be rebuilt removing the `-opengl desktop` config
-  parameter to use ANGLE, which ships with the qt5 sources.
+  parameter to use ANGLE, which ships with the qt5 sources, however tha cannot
+  be built for Visual Studio 2008 due to heavy use of C++11 and beyond.
 
   Qt5, especially QtWebKit, have a few source files with paths that are long
   enough to cause problems for the MSVC compiler, which has a 260 character
   constraint. This caused problems when I installed anaconda in
   `C:\Users\myprofile\anaconda` (particularly when compiling the third-party
-  webp graphics plugin for qtwebkit). Installing anaconda/miniconda in
-  `C:\conda` worked around this issue. 
+  webp graphics plugin for qtwebkit). For this reason the build is performed
+  in a directory at the root of the C: drive.

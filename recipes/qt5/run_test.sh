@@ -1,6 +1,6 @@
 #!/bin/bash
 
 cd test
-qmake-qt5 hello.pro
+qmake hello.pro
 make
 ./hello

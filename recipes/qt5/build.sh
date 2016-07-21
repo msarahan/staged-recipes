@@ -1,24 +1,32 @@
 #!/bin/bash
 
-# Main variables
-# --------------
-BIN=$PREFIX/lib/qt5/bin
-QTCONF=$BIN/qt.conf
-
-
 # Compile
 # -------
 chmod +x configure
 
 if [ `uname` == Linux ]; then
+
+    # Download QtWebkit
+    curl "http://linorg.usp.br/Qt/community_releases/5.6/${PKG_VERSION}/qtwebkit-opensource-src-${PKG_VERSION}.tar.xz" > qtwebkit.tar.xz
+    unxz qtwebkit.tar.xz
+    tar xf qtwebkit.tar
+    mv qtwebkit-opensource-src* qtwebkit
+    patch -p0 < "${RECIPE_DIR}"/0001-qtwebkit-old-ld-compat.patch
+    patch -p0 < "${RECIPE_DIR}"/0002-qtwebkit-ruby-1.8.patch
+    patch -p0 < "${RECIPE_DIR}"/0003-qtwebkit-O_CLOEXEC-workaround.patch
+    patch -p0 < "${RECIPE_DIR}"/0004-qtwebkit-CentOS5-Fix-fucomip-compat-with-gas-2.17.50.patch
+    # From https://bugs.webkit.org/show_bug.cgi?id=70610, http://trac.webkit.org/changeset/172759, https://github.com/WebKit/webkit/commit/4d7f0f
+    patch -p0 < "${RECIPE_DIR}"/0005-qtwebkit-fix-TEXTREL-on-x86-changeset_172759.patch
+    rm qtwebkit.tar
+
     MAKE_JOBS=$CPU_COUNT
 
     ./configure -prefix $PREFIX \
                 -libdir $PREFIX/lib \
-                -bindir $PREFIX/lib/qt5/bin \
-                -headerdir $PREFIX/include/qt5 \
-                -archdatadir $PREFIX/lib/qt5 \
-                -datadir $PREFIX/share/qt5 \
+                -bindir $PREFIX/bin \
+                -headerdir $PREFIX/include/qt \
+                -archdatadir $PREFIX \
+                -datadir $PREFIX \
                 -L $PREFIX/lib \
                 -I $PREFIX/include \
                 -release \
@@ -32,12 +40,12 @@ if [ `uname` == Linux ]; then
                 -skip location \
                 -skip sensors \
                 -skip serialport \
-                -skip script \
                 -skip serialbus \
                 -skip quickcontrols2 \
                 -skip wayland \
                 -skip canvas3d \
                 -skip 3d \
+                -skip webengine \
                 -system-libjpeg \
                 -system-libpng \
                 -system-zlib \
@@ -46,11 +54,26 @@ if [ `uname` == Linux ]; then
                 -qt-xkbcommon \
                 -xkb-config-root $PREFIX/lib \
                 -dbus \
-                -c++11 \
                 -no-linuxfb \
-                -no-libudev
+                -no-libudev \
+                -D _X_INLINE=inline \
+                -D XK_dead_currency=0xfe6f \
+                -D XK_ISO_Level5_Lock=0xfe13 \
+                -D FC_WEIGHT_EXTRABLACK=215 \
+                -D FC_WEIGHT_ULTRABLACK=FC_WEIGHT_EXTRABLACK \
+                -D GLX_GLXEXT_PROTOTYPES
+# To get a much quicker turnaround you can add this: (remember also to add the backslash after GLX_GLXEXT_PROTOTYPES)
+# -skip qtwebsockets -skip qtwebchannel -skip qtwayland -skip qtsvg -skip qtsensors -skip qtcanvas3d -skip qtconnectivity -skip declarative -skip multimedia -skip qttools
 
-    LD_LIBRARY_PATH=$PREFIX/lib make -j $MAKE_JOBS
+# If we must not remove strict_c++ from qtbase/mkspecs/features/qt_common.prf
+# (0007-qtbase-CentOS5-Do-not-use-strict_c++.patch) then we need to add these
+# defines instead:
+# -D __u64="unsigned long long" \
+# -D __s64="__signed__ long long" \
+# -D __le64="unsigned long long" \
+# -D __be64="__signed__ long long"
+
+    LD_LIBRARY_PATH=$PREFIX/lib make -j $MAKE_JOBS || exit 1
     make install
 fi
 
@@ -61,15 +84,15 @@ if [ `uname` == Darwin ]; then
         unset $x
     done
 
-    MACOSX_DEPLOYMENT_TARGET=10.7
+    export MACOSX_DEPLOYMENT_TARGET=10.7
     MAKE_JOBS=$(sysctl -n hw.ncpu)
 
     ./configure -prefix $PREFIX \
                 -libdir $PREFIX/lib \
-                -bindir $PREFIX/lib/qt5/bin \
-                -headerdir $PREFIX/include/qt5 \
-                -archdatadir $PREFIX/lib/qt5 \
-                -datadir $PREFIX/share/qt5 \
+                -bindir $PREFIX/bin \
+                -headerdir $PREFIX/include/qt \
+                -archdatadir $PREFIX \
+                -datadir $PREFIX \
                 -L $PREFIX/lib \
                 -I $PREFIX/include \
                 -release \
@@ -83,7 +106,6 @@ if [ `uname` == Darwin ]; then
                 -skip location \
                 -skip sensors \
                 -skip serialport \
-                -skip script \
                 -skip serialbus \
                 -skip quickcontrols2 \
                 -skip wayland \
@@ -105,22 +127,17 @@ if [ `uname` == Darwin ]; then
                 -no-egl \
                 -no-openssl
 
-    DYLD_FALLBACK_LIBRARY_PATH=$PREFIX/lib make -j $MAKE_JOBS
+    DYLD_FALLBACK_LIBRARY_PATH=$PREFIX/lib make -j $MAKE_JOBS || exit 1
     make install
 fi
 
 
 # Post build setup
 # ----------------
-
-# Make symlinks of binaries in $BIN to $PREFIX/bin
-for file in $BIN/*
-do
-    ln -sfv ../lib/qt5/bin/$(basename $file) $PREFIX/bin/$(basename $file)-qt5
-done
-
-# Remove static libs
-rm -rf $PREFIX/lib/*.a
+# Remove static libraries that are not part of the Qt SDK.
+pushd "${PREFIX}"/lib > /dev/null
+    find . -name "*.a" -and -not -name "libQt*" -exec rm -f {} \;
+popd > /dev/null
 
 # Add qt.conf file to the package to make it fully relocatable
-cp $RECIPE_DIR/qt.conf $BIN/
+cp "${RECIPE_DIR}"/qt.conf "${PREFIX}"/bin/
