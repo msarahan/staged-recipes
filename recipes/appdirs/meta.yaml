@@ -1,0 +1,38 @@
+{% set name = "appdirs" %}
+{% set version = "1.4.0" %}
+{% set md5 = "1d17b4c9694ab84794e228f28dc3275b" %}
+
+package:
+  name: {{ name|lower }}
+  version: {{ version }}
+
+source:
+  fn: {{ name }}-{{ version }}.tar.gz
+  url: https://pypi.io/packages/source/{{ name[0] }}/{{ name }}/{{ name }}-{{ version }}.tar.gz
+  md5: {{ md5 }}
+
+build:
+  number: 0
+  script: python setup.py install --single-version-externally-managed --record=record.txt
+
+requirements:
+  build:
+    - python
+    - setuptools
+
+  run:
+    - python
+
+test:
+  imports:
+    - appdirs
+
+about:
+  home: http://github.com/ActiveState/appdirs
+  license: MIT
+  summary: Python module for determining appropriate platform-specific dirs
+  license_family: MIT
+
+extra:
+  recipe-maintainers:
+    - msarahan
