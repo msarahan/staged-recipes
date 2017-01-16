@@ -12,8 +12,18 @@ requirements:
   build:
     - crosstool-ng
 
-# outputs:
-#   - name: gcc_linux-64_linux-aarch64
-#   - name: g++_linux-64_linux-aarch64
-#   - name: libstdc++_linux-aarch64
-#   - name: libgcc_linux-aarch64
+outputs:
+  - name: gcc_linux-64_linux-aarch64
+    script: install-gcc.sh
+    requirements:
+      - binutils_linux-64_linux-aarch64
+  - name: g++_linux-64_linux-aarch64
+    script: install-g++.sh
+    requirements:
+      - binutils_linux-64_linux-aarch64
+  - name: binutils_linux-64-aarch64
+    script: install-binutils.sh
+  - name: libstdc++_linux-aarch64
+    script: install-libstdc++.sh
+  - name: libgcc_linux-aarch64
+    script: install-libgcc.sh
