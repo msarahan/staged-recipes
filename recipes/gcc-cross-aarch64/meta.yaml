@@ -1,0 +1,19 @@
+package:
+  name: gcc-cross-aarch64
+  version: 6.3.0
+
+source:
+  path: .
+
+build:
+  detect_binary_files_with_prefix: False
+
+requirements:
+  build:
+    - crosstool-ng
+
+# outputs:
+#   - name: gcc_linux-64_linux-aarch64
+#   - name: g++_linux-64_linux-aarch64
+#   - name: libstdc++_linux-aarch64
+#   - name: libgcc_linux-aarch64
