@@ -1,0 +1,2 @@
+make develop 
+make test
