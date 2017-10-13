@@ -1,0 +1,38 @@
+{% set git_rev="90e3ac17818aac73a93976c6947bba8cf897690d" %}
+
+package:
+  name: conda-verify
+  version: {{ GIT_DESCRIBE_TAG }}
+
+source:
+  git_url: https://github.com/conda/conda-verify
+  # use git rev to point to unique id that doesn't change when github changes git version
+  #    This corresponds to the 3.0.0 tag.
+  git_rev: {{ git_rev }}
+
+requirements:
+  build:
+    - python
+    - setuptools
+    - pip
+  run:
+    - python
+    - jinja2
+    - click
+    - pyyaml
+    - backports.functools_lru_cache  # [py<33]
+
+build:
+  script: pip install . --no-deps
+
+test:
+  imports:
+    - conda_verify
+  commands:
+    - conda-verify --version
+    - conda-verify --help
+
+about:
+  home: https://github.com/conda/conda-verify
+  license: BSD
+  license_file: LICENSE.txt
