@@ -1,0 +1,38 @@
+{% set name = "vswhere" %}
+{% set version = "2.7.1" %}
+
+package:
+  name: {{ name|lower }}
+  version: {{ version }}
+
+source:
+  url: https://github.com/microsoft/vswhere/archive/{{ version }}.tar.gz
+  sha256: e40ea30fac7609850621e0342028168ef950dec2c3edff767c476ce6e99f8e38
+
+build:
+  number: 0
+  skip: True  # [not win or vc < 14]
+
+requirements:
+  build:
+    - {{ compiler('c') }}
+    - m2-sed
+    - nuget
+
+test:
+  requires:
+    - {{ compiler('c') }}
+  commands:
+    - vswhere
+
+about:
+  home: https://github.com/microsoft/vswhere
+  license: MIT
+  license_family: MIT
+  license_file: LICENSE.txt
+  summary: executable that can be used to find Visual Studio and related tools
+
+extra:
+  recipe-maintainers:
+    - msarahan
+
